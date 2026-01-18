@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,10 +19,13 @@ const navItems = [
 ];
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+
   return (
-<header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-sm">
+    <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-sm">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
+
           {/* Brand */}
           <Link href="/" className="flex flex-col leading-tight">
             <span className="text-lg font-bold tracking-tight">
@@ -38,7 +42,7 @@ export default function Navbar() {
               <Link
                 key={item.label}
                 href={item.href}
-                className="transition-opacity hover:opacity-80"
+                className="hover:opacity-80 transition"
               >
                 {item.label}
               </Link>
@@ -60,7 +64,7 @@ export default function Navbar() {
 
           {/* Mobile Menu */}
           <div className="md:hidden">
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
                 <Button
                   size="icon"
@@ -75,24 +79,30 @@ export default function Navbar() {
                 side="right"
                 className="bg-primary text-primary-foreground border-none"
               >
-                <div className="flex flex-col gap-6 mt-8">
-                  {/* Mobile Links */}
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="text-lg font-medium hover:opacity-80"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+                {/* Mobile Content */}
+                <div className="flex flex-col items-center justify-center gap-8 h-full text-center">
+
+                  {/* Links */}
+                  <nav className="flex flex-col gap-6">
+                    {navItems.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setOpen(false)} // ✅ auto-close
+                        className="text-xl font-semibold hover:opacity-80 transition"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </nav>
 
                   {/* Divider */}
-                  <div className="h-px bg-primary-foreground/20" />
+                  <div className="w-24 h-px bg-primary-foreground/30" />
 
-                  {/* Mobile CTA */}
+                  {/* CTA */}
                   <Button
                     asChild
+                    onClick={() => setOpen(false)}
                     className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
                   >
                     <a href={`tel:${BUSINESS_INFO.phone1}`}>
